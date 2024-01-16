@@ -39,6 +39,7 @@
       - [API Version and Kind:](#api-version-and-kind-4)
       - [Metadata:](#metadata-4)
       - [Specification (`spec`):](#specification-spec-4)
+  - [Acknowledgment](#acknowledgment)
 
 
 # Prometheus Lab
@@ -346,3 +347,5 @@ Here, we provide metadata for our `AlertmanagerConfig`. The `name` is set to `al
     - `emailConfigs:` Email-specific configuration.
         -  `- to: "team@example.com"`: Email address to which notifications are sent.
         -  `sendResolved: true`: Whether to send notifications when alerts are resolved.
+## Acknowledgment
+I extend my sincere gratitude to all the readers who have dedicated their valuable time and exhibited patience in exploring this content. Your commitment to learning and understanding is truly appreciated.
