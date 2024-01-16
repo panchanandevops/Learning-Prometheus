@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: AlertmanagerConfig
+metadata:
+  name: alertmanager-config
+  labels:
+    release: prometheus
+spec:
+  route:
+    groupBy: ["severity"]
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 12h
+    receiver: "team-notifications"
+
+  receivers:
+    - name: "team-notifications"
+      emailConfigs:
+        - to: "team@example.com"
+          sendResolved: true
