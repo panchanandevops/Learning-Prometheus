@@ -1,17 +1,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: example-prometheus-rule
+  name: api-prometheus-rule
   labels:
-    release: prometheus
+    release: prometheus # Label for release association
 spec:
   groups:
-    - name: api
+    - name: api # Name of the rule group
       rules:
-        - alert: down
-          expr: up == 0
-          for: 0m
+        - alert: down # Alert name
+          expr: up == 0 # Expression to trigger the alert when 'up' is equal to 0
+          for: 0m # Minimum duration for which the alert condition must be true to trigger the alert
           labels:
-            severity: Critical
+            severity: Critical # Label indicating the severity of the alert
           annotations:
             summary: Prometheus target missing {{$labels.instance}}
