@@ -1,8 +1,3 @@
-
-
-# Table of Contents
-
-- [Table of Contents](#table-of-contents)
 - [Decoding PromQL: A Deep Dive into Prometheus Query Language](#decoding-promql-a-deep-dive-into-prometheus-query-language)
   - [Introduction to PromQL](#introduction-to-promql)
   - [Data Types of PromQL](#data-types-of-promql)
@@ -20,7 +15,7 @@
     - [Gauge:](#gauge)
     - [Histogram:](#histogram)
     - [Summary:](#summary)
-  - [Begin Your Monitoring Journey! 🚀](#begin-your-monitoring-journey-)
+  - [Begin Your Monitoring Journey!](#begin-your-monitoring-journey)
 ---
 
 
@@ -162,13 +157,11 @@ The instant vector in Prometheus is a set of time series data, each associated w
    ```
    - The query computes the sum of the rates of incoming and outgoing network traffic over the last hour, providing an instant vector.
 
-
-
 ### Range Vector:
 
 The Range Vector in Prometheus is a set of time series data, each associated with a range of values over a specified time interval. Range Vectors are commonly used in PromQL queries to analyze and evaluate metrics over a duration, allowing for calculations, aggregations, and comparisons over time.
 
-
+Key characteristics of the Range Vector data type:
 
 1. **Time Series Over a Range:**
    - The Range Vector provides a set of time series data, each representing a range of values over a specified time interval.
@@ -592,7 +585,7 @@ A Prometheus Summary is a metric type designed to measure and track the distribu
 
 ---
 
-## Begin Your Monitoring Journey! 🚀
+## Begin Your Monitoring Journey! 
 
 Get ready to navigate your metrics with **confidence!** Stay tuned for more insights, tips, and tricks to keep your monitoring game strong. Keep exploring, keep learning, and keep monitoring! **Happy monitoring!** 📊👀😊
 

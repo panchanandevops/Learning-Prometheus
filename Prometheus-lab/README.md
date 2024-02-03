@@ -2,17 +2,6 @@
   - [Aim Of The Project:](#aim-of-the-project)
   - [Project architecture:](#project-architecture)
   - [Prerequisites](#prerequisites)
-      - [To install `k3d`, you can use the following command:](#to-install-k3d-you-can-use-the-following-command)
-      - [Check out my GitHub Repo:](#check-out-my-github-repo)
-      - [Create a Namespace for `Monitoring`:](#create-a-namespace-for-monitoring)
-      - [Add Helm Repository:](#add-helm-repository)
-      - [Store Default values.yaml](#store-default-valuesyaml)
-      - [Install `kube-prometheus-stack` Helm Chart in `monitoring` Namespace:](#install-kube-prometheus-stack-helm-chart-in-monitoring-namespace)
-      - [Verify Deployment, after some time:](#verify-deployment-after-some-time)
-      - [Access Prometheus Dashboard:](#access-prometheus-dashboard)
-      - [Access Grafana Dashboard:](#access-grafana-dashboard)
-      - [Login with the default credentials:](#login-with-the-default-credentials)
-      - [Change in values.yaml](#change-in-valuesyaml)
   - [Apply our k8s-yaml resources:](#apply-our-k8s-yaml-resources)
   - [Lets Understand All Kubernetes resources:](#lets-understand-all-kubernetes-resources)
     - [Deployment](#deployment)
@@ -52,46 +41,46 @@ The primary goal of this Prometheus Lab project is to provide hands-on experienc
 
 ## Prerequisites
 
-#### To install `k3d`, you can use the following command:
+**To install `k3d`, you can use the following command:**
 
 ```bash
 curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 ```
-#### Check out my GitHub Repo:
+**Check out my GitHub Repo:**
 ```text
 https://github.com/panchanandevops/Learning-Prometheus.git
 ```
-#### Create a Namespace for `Monitoring`:
+**Create a Namespace for `Monitoring`:
 
 ```bash
 kubectl create namespace monitoring
 ```
 
-#### Add Helm Repository:
+**Add Helm Repository:**
 
 ```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 ```
-#### Store Default values.yaml
+**Store Default values.yaml**
 
 ```bash
 helm show values prometheus-community/kube-prometheus-stack > values.yaml
 ```
 
-#### Install `kube-prometheus-stack` Helm Chart in `monitoring` Namespace:
+**Install `kube-prometheus-stack` Helm Chart in `monitoring` Namespace:**
 
 ```bash
 helm install prometheus-stack prometheus-community/kube-prometheus-stack -n monitoring
 ```
 
-#### Verify Deployment, after some time:
+**Verify Deployment, after some time:**
 
 ```bash
 kubectl get pods -n monitoring
 ```
 
-#### Access Prometheus Dashboard:
+**Access Prometheus Dashboard:**
 
 ```bash
 kubectl port-forward svc/prometheus-stack-prometheus -n monitoring 9090:9090
@@ -100,7 +89,7 @@ kubectl port-forward svc/prometheus-stack-prometheus -n monitoring 9090:9090
 
 ![](../IMG/1.png) 
 
-#### Access Grafana Dashboard:
+**Access Grafana Dashboard:**
 
 ```bash
 kubectl port-forward svc/prometheus-stack-grafana -n monitoring 8080:80
@@ -110,13 +99,13 @@ kubectl port-forward svc/prometheus-stack-grafana -n monitoring 8080:80
 
 ![](../IMG/grafana-security-login-authentication.png)
 
-#### Login with the default credentials:
+**Login with the default credentials:**
 Username: admin. Retrieve the password using the following command:
 
 ```bash
 kubectl get secret prometheus-stack-grafana -n monitoring -o jsonpath='{.data.admin-password}' | base64 --decode ; echo
 ```
-#### Change in values.yaml
+**Change in values.yaml**
 
 In order to select `AltermanagerConfig`, we need to change our `values.yaml` file. 
 
@@ -131,6 +120,7 @@ altermanagerConfigSelector:
 ```
 
 ## Apply our k8s-yaml resources:
+
 ```bash
 kubectl apply -f <your-path>/k8s-yaml/
 ```
@@ -339,21 +329,21 @@ Here, we provide metadata for our `AlertmanagerConfig`. The `name` is set to `al
 1. **Part 1: Route Configuration:**
     ```yaml
       spec:
-    route:
-      groupBy: ["severity"]
-      groupWait: 30s
-      groupInterval: 5m
-      repeatInterval: 12h
-      receiver: "team-notifications"
+        route:
+          groupBy: ["severity"]
+          groupWait: 30s
+          groupInterval: 5m
+          repeatInterval: 12h
+          receiver: "team-notifications"
     ```
 2. **Part 2: Receiver Configuration:**
     ```yaml
       spec:
-    receivers:
-      - name: "team-notifications"
-        emailConfigs:
-          - to: "team@example.com"
-            sendResolved: true
+        receivers:
+          - name: "team-notifications"
+            emailConfigs:
+              - to: "team@example.com"
+                sendResolved: true
     ```
     - `- name: "team-notifications"`: Name of the receiver.
     - `emailConfigs:` Email-specific configuration.
