@@ -1,10 +1,11 @@
 # Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [Prometheus Lab](#prometheus-lab)
+- [Real-world Prometheus Deployment: A Practical Guide for Kubernetes Monitoring](#real-world-prometheus-deployment-a-practical-guide-for-kubernetes-monitoring)
   - [Aim Of The Project:](#aim-of-the-project)
   - [Prerequisites](#prerequisites)
       - [To install `k3d`, you can use the following command:](#to-install-k3d-you-can-use-the-following-command)
+      - [Checkout my GitHub Repo:](#checkout-my-github-repo)
       - [Create a Namespace for `Monitoring`:](#create-a-namespace-for-monitoring)
       - [Add Helm Repository:](#add-helm-repository)
       - [Store Default values.yaml](#store-default-valuesyaml)
@@ -41,11 +42,11 @@
       - [Specification (`spec`):](#specification-spec-4)
   - [Acknowledgment](#acknowledgment)
 
-
-# Prometheus Lab
+# Real-world Prometheus Deployment: A Practical Guide for Kubernetes Monitoring
 
 ## Aim Of The Project:
 
+The primary goal of this Prometheus Lab project is to provide hands-on experience and guidance in setting up a Prometheus monitoring system on a Kubernetes cluster. By following the step-by-step instructions and understanding the associated Kubernetes resources, participants will gain practical insights into deploying Prometheus for efficient system observability.
 
 ## Prerequisites
 
@@ -53,6 +54,10 @@
 
 ```bash
 curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
+```
+#### Checkout my GitHub Repo:
+```text
+
 ```
 #### Create a Namespace for `Monitoring`:
 
@@ -326,26 +331,28 @@ Here, we provide metadata for our `AlertmanagerConfig`. The `name` is set to `al
 
 1. **Part 1: Route Configuration:**
     ```yaml
-    spec:
-  route:
-    groupBy: ["severity"]
-    groupWait: 30s
-    groupInterval: 5m
-    repeatInterval: 12h
-    receiver: "team-notifications"
+      spec:
+    route:
+      groupBy: ["severity"]
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 12h
+      receiver: "team-notifications"
     ```
 2. **Part 2: Receiver Configuration:**
     ```yaml
-    spec:
-  receivers:
-    - name: "team-notifications"
-      emailConfigs:
-        - to: "team@example.com"
-          sendResolved: true
+      spec:
+    receivers:
+      - name: "team-notifications"
+        emailConfigs:
+          - to: "team@example.com"
+            sendResolved: true
     ```
     - `- name: "team-notifications"`: Name of the receiver.
     - `emailConfigs:` Email-specific configuration.
         -  `- to: "team@example.com"`: Email address to which notifications are sent.
         -  `sendResolved: true`: Whether to send notifications when alerts are resolved.
 ## Acknowledgment
+Special thanks to my teacher [**Sir sanjeev thiyagarajan**](https://github.com/Sanjeev-Thiyagarajan) for their guidance, and to the [KodeKloud](https://youtu.be/6xmWr7p5TE0) YouTube channel for valuable insights into DevOps practices.
+
 I extend my sincere gratitude to all the readers who have dedicated their valuable time and exhibited patience in exploring this content. Your commitment to learning and understanding is truly appreciated.
