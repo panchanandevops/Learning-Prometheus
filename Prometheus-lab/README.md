@@ -1,20 +1,18 @@
-# Table of Contents
-
-- [Table of Contents](#table-of-contents)
 - [Real-world Prometheus Deployment: A Practical Guide for Kubernetes Monitoring](#real-world-prometheus-deployment-a-practical-guide-for-kubernetes-monitoring)
   - [Aim Of The Project:](#aim-of-the-project)
+  - [Project architecture:](#project-architecture)
   - [Prerequisites](#prerequisites)
       - [To install `k3d`, you can use the following command:](#to-install-k3d-you-can-use-the-following-command)
-      - [Checkout my GitHub Repo:](#checkout-my-github-repo)
+      - [Check out my GitHub Repo:](#check-out-my-github-repo)
       - [Create a Namespace for `Monitoring`:](#create-a-namespace-for-monitoring)
       - [Add Helm Repository:](#add-helm-repository)
       - [Store Default values.yaml](#store-default-valuesyaml)
       - [Install `kube-prometheus-stack` Helm Chart in `monitoring` Namespace:](#install-kube-prometheus-stack-helm-chart-in-monitoring-namespace)
-      - [Verify Deployment, after sometime:](#verify-deployment-after-sometime)
+      - [Verify Deployment, after some time:](#verify-deployment-after-some-time)
       - [Access Prometheus Dashboard:](#access-prometheus-dashboard)
       - [Access Grafana Dashboard:](#access-grafana-dashboard)
       - [Login with the default credentials:](#login-with-the-default-credentials)
-      - [change in values.yaml](#change-in-valuesyaml)
+      - [Change in values.yaml](#change-in-valuesyaml)
   - [Apply our k8s-yaml resources:](#apply-our-k8s-yaml-resources)
   - [Lets Understand All Kubernetes resources:](#lets-understand-all-kubernetes-resources)
     - [Deployment](#deployment)
@@ -48,6 +46,10 @@
 
 The primary goal of this Prometheus Lab project is to provide hands-on experience and guidance in setting up a Prometheus monitoring system on a Kubernetes cluster. By following the step-by-step instructions and understanding the associated Kubernetes resources, participants will gain practical insights into deploying Prometheus for efficient system observability.
 
+## Project architecture:
+
+![](../IMG/graphic-3-.png)
+
 ## Prerequisites
 
 #### To install `k3d`, you can use the following command:
@@ -55,7 +57,7 @@ The primary goal of this Prometheus Lab project is to provide hands-on experienc
 ```bash
 curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 ```
-#### Checkout my GitHub Repo:
+#### Check out my GitHub Repo:
 ```text
 https://github.com/panchanandevops/Learning-Prometheus.git
 ```
@@ -83,7 +85,7 @@ helm show values prometheus-community/kube-prometheus-stack > values.yaml
 helm install prometheus-stack prometheus-community/kube-prometheus-stack -n monitoring
 ```
 
-#### Verify Deployment, after sometime:
+#### Verify Deployment, after some time:
 
 ```bash
 kubectl get pods -n monitoring
@@ -96,6 +98,8 @@ kubectl port-forward svc/prometheus-stack-prometheus -n monitoring 9090:9090
 ```
 - Open your web browser and navigate to `http://localhost:9090` to access the Prometheus dashboard.
 
+![](../IMG/1.png) 
+
 #### Access Grafana Dashboard:
 
 ```bash
@@ -104,20 +108,21 @@ kubectl port-forward svc/prometheus-stack-grafana -n monitoring 8080:80
 
 - Open your web browser and navigate to `http://localhost:8080`.
 
+![](../IMG/grafana-security-login-authentication.png)
 
 #### Login with the default credentials:
-Username: admin Password: (Retrieve the password using the following command):
+Username: admin. Retrieve the password using the following command:
 
 ```bash
 kubectl get secret prometheus-stack-grafana -n monitoring -o jsonpath='{.data.admin-password}' | base64 --decode ; echo
 ```
-#### change in values.yaml
+#### Change in values.yaml
 
-In order to select `AltermanagerConfig` , we need to change our `values.yaml` file. 
+In order to select `AltermanagerConfig`, we need to change our `values.yaml` file. 
 
-search in values.yaml for `alertmanagerConfigSelector`
+Search in values.yaml for `alertmanagerConfigSelector`
 
-then replace that section with following section
+then replace that section with the following section
 
 ```yaml
 altermanagerConfigSelector:
@@ -134,7 +139,7 @@ kubectl apply -f <your-path>/k8s-yaml/
 ## Lets Understand All Kubernetes resources:
 
 ### Deployment
-Let's break down the  Kubernetes Deployment YAML file in a clear and user-friendly way:
+Let's break down the Kubernetes Deployment YAML file in a clear and simple way:
 
 #### API Version and Kind:
 ```yaml
@@ -180,6 +185,8 @@ In the template, we describe the pods created by our Deployment. Metadata labels
         resources:
           limits:
             memory: "128Mi"
+
+
             cpu: "500m"
         ports:
           - containerPort: 3000
@@ -187,7 +194,7 @@ In the template, we describe the pods created by our Deployment. Metadata labels
 Within the pod, we define a container named `mycontainer`. It uses the Docker image `panchanandevops/myexpress:v0.1.0`, has resource limits for memory and CPU, and exposes port `3000`.
 
 ### Service
-Let's break down the  Kubernetes Service YAML file in a clear and user-friendly way:
+Let's break down the Kubernetes Service YAML file in a clear and simple way:
 
 #### API Version and Kind:
 ```yaml
@@ -220,13 +227,13 @@ spec:
 ```
 In this part, we define the specifications for our Service:
 
-- `type: ClusterIP`: It specifies that the Service is of type ClusterIP.
-- `selector`: This is used to match pods for this service, and in this case, it selects pods with the label `app: api`.
-- `ports`: Here, we define a port named `web` with TCP protocol, and it will be available on port `3000`, targeting the pods on their port `3000`.
+- `type: ClusterIP`: Specifies that the Service is of type ClusterIP.
+- `selector`: Used to match pods for this service, and in this case, it selects pods with the label `app: api`.
+- `ports`: Defines a port named `web` with TCP protocol, available on port `3000`, targeting the pods on their port `3000`.
 
 
 ### ServiceMonitor
-Let's break down the  Kubernetes ServiceMonitor YAML file in a clear and user-friendly way:
+Let's break down the Kubernetes ServiceMonitor YAML file in a clear and simple way:
 
 #### API Version and Kind:
 ```yaml
@@ -258,13 +265,13 @@ spec:
 ```
 In this part, we define the specifications for our `ServiceMonitor`:
 
-- `jobLabel: job`: It specifies the label (`job`) used to identify the job for Prometheus.
-- `selector`: This is used to match pods for monitoring, and it selects pods with the label `app: api`.
-- `endpoints`: Here, we define the endpoints to scrape metrics. In this case, we specify a port named `web` and the path `/swagger-stats/metrics` to fetch metrics from.
+- `jobLabel: job`: Specifies the label (`job`) used to identify the job for Prometheus.
+- `selector`: Used to match pods for monitoring; it selects pods with the label `app: api`.
+- `endpoints`: Defines the endpoints to scrape metrics. In this case, it specifies a port named `web` and the path `/swagger-stats/metrics` to fetch metrics from.
 
 
 ### PrometheusRules
-Let's break down the  Kubernetes PrometheusRules YAML file in a clear and user-friendly way:
+Let's break down the Kubernetes PrometheusRules YAML file in a clear and simple way:
 
 #### API Version and Kind:
 ```yaml
@@ -298,7 +305,7 @@ spec:
 ```
 In this part, we define the specifications for our `PrometheusRule`:
 
-- `groups`: This is an array of rule groups. In this case, we have one group named `api`.
+- `groups`: An array of rule groups. In this case, we have one group named `api`.
   - `name: api`: Name of the rule group.
   - `rules`: An array of rules within the group.
     - `alert: down`: Name of the alert.
@@ -308,7 +315,7 @@ In this part, we define the specifications for our `PrometheusRule`:
     - `annotations`: Annotations provide additional information about the alert (e.g., summary).
 
 ### Alertmanagerconfig
-Let's break down the  Kubernetes Alertmanagerconfig YAML file in a clear and user-friendly way:
+Let's break down the Kubernetes Alertmanagerconfig YAML file in a clear and simple way:
 
 #### API Version and Kind:
 ```yaml
@@ -351,8 +358,9 @@ Here, we provide metadata for our `AlertmanagerConfig`. The `name` is set to `al
     - `- name: "team-notifications"`: Name of the receiver.
     - `emailConfigs:` Email-specific configuration.
         -  `- to: "team@example.com"`: Email address to which notifications are sent.
-        -  `sendResolved: true`: Whether to send notifications when alerts are resolved.
+        -  `sendResolved: true`: Indicates whether to send notifications when alerts are resolved.
+
 ## Acknowledgment
-Special thanks to my teacher [**Sir sanjeev thiyagarajan**](https://github.com/Sanjeev-Thiyagarajan) for their guidance, and to the [KodeKloud](https://youtu.be/6xmWr7p5TE0) YouTube channel for valuable insights into DevOps practices.
+Special thanks to my teacher [**Sir Sanjeev Thiyagarajan**](https://github.com/Sanjeev-Thiyagarajan) for his guidance, and to the [KodeKloud](https://youtu.be/6xmWr7p5TE0) YouTube channel for valuable insights into DevOps practices.
 
 I extend my sincere gratitude to all the readers who have dedicated their valuable time and exhibited patience in exploring this content. Your commitment to learning and understanding is truly appreciated.
