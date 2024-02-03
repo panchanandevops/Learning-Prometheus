@@ -57,7 +57,7 @@ curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 ```
 #### Checkout my GitHub Repo:
 ```text
-
+https://github.com/panchanandevops/Learning-Prometheus.git
 ```
 #### Create a Namespace for `Monitoring`:
 
